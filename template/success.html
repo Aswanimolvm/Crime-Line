@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complaint Submitted | Crimeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #e8f5e9, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: hsl(184, 100%, 34%);
+    }
+
+    .container {
+      text-align: center;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 128, 0, 0.1); /* You can optionally change this shadow if desired */
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+      color: hsl(184, 100%, 34%);
+      animation: pop 0.6s ease;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: hsl(184, 100%, 34%);
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: hsl(184, 100%, 34%);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 10px 5px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: hsl(184, 100%, 30%);
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+
+      .icon {
+        font-size: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <h1>Complaint Submitted</h1>
+    <p>Your issue has been successfully recorded. Our team will look into it shortly.</p>
+    <a href="{% url 'report_issue' %}" class="btn"><i class="fas fa-plus-circle"></i> Report Another</a>
+    <a href="{% url 'home_page' %}" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+  </div>
+</body>
+</html>

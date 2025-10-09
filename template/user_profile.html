@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CrimeLine Profile Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .form-container {
+      width: 1100px;
+      background-color: #fff;
+      padding: 40px 60px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 40px;
+      font-family: 'Georgia', serif;
+    }
+
+    .logo::before {
+      content: "";
+      display: inline-block;
+      width: 28px;
+      height: 20px;
+      background-image: url('https://img.icons8.com/ios-filled/50/security-camera.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .logo span {
+      color: hsl(184, 100%, 34%);
+      font-weight: bold;
+    }
+
+    .form-wrapper {
+      display: flex;
+      position: relative;
+    }
+
+    .form-column {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      padding: 0 20px;
+    }
+
+    .form-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: #ccc;
+      transform: translateX(-50%);
+    }
+
+    label {
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #888;
+      font-family: 'Georgia', serif;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="tel"],
+    select,
+    textarea {
+      padding: 14px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: 'Georgia', serif;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 80px;
+    }
+
+    .actions {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .btn {
+      background-color: hsl(184, 100%, 34%);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      margin: 0 15px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: hsl(184, 100%, 30%);
+    }
+
+    .btn a {
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .form-wrapper {
+        flex-direction: column;
+      }
+
+      .form-column {
+        width: 100%;
+      }
+
+      .form-wrapper::before {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="logo">Crime<span>LINE</span></div>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-wrapper">
+        <div class="form-column">
+          <label>Full Name</label>
+          <input type="text" name="full_name" value="{{ user.full_name }}" placeholder="Full Name">
+
+          <label>Mobile Number</label>
+          <input type="tel" name="mobile_number" value="{{ user.mobile_number }}" placeholder="Mobile Number">
+
+          <label>Email ID</label>
+          <input type="email" name="email" value="{{ user.email }}" placeholder="Email ID">
+
+          <label>D.O.B</label>
+          <input type="date" name="date_of_birth" value="{{ user.date_of_birth }}" disabled >
+
+          <label>Password</label>
+          <input type="password" value="********" disabled placeholder="Password (Hidden)">
+        </div>
+
+        <div class="form-column">
+          <label>State</label>
+          <select name="state">
+            <option disabled>Select your state</option>
+            <option {% if user.state == "Kerala" %}selected{% endif %}>Kerala</option>
+            <option {% if user.state == "Tamil Nadu" %}selected{% endif %}>Tamil Nadu</option>
+            <option {% if user.state == "Karnataka" %}selected{% endif %}>Karnataka</option>
+          </select>
+
+          <label>Address</label>
+          <textarea name="address">{{ user.address }}</textarea>
+
+          <label>ID Proof</label>
+          <select name="id_proof">
+            <option disabled>Select ID Type</option>
+            <option {% if user.id_proof == "Aadhar" %}selected{% endif %}>Aadhar</option>
+            <option {% if user.id_proof == "Voter ID" %}selected{% endif %}>Voter ID</option>
+            <option {% if user.id_proof == "Passport" %}selected{% endif %}>Passport</option>
+          </select>
+
+          <label>ID Proof Number</label>
+          <input type="text" name="id_proof_number" value="{{ user.id_proof_number }}">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn">Save Changes</button>
+        <a href="{% url 'home_page' %}" class="btn">Cancel</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

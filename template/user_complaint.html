@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Issues</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+            color: #000;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 30px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: hsl(184, 100%, 34%);
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: hsl(184, 100%, 34%);
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #aaa;
+            border-radius: 10px;
+            font-size: 14px;
+            background-color: #f6fff8;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background-color: hsl(184, 100%, 95%);
+            color: hsl(184, 100%, 34%);
+            font-weight: 500;
+            border: 2px dashed hsl(184, 100%, 34%);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .upload-label:hover {
+            background-color: hsl(184, 100%, 90%);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .button-group button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 12px;
+            background-color: hsl(184, 100%, 34%);
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .button-group button:hover {
+            background-color: hsl(184, 100%, 30%);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Report Issues Seamlessly</h1>
+        <p>Our platform empowers users to submit complaints with ease, offering tools to upload multimedia for comprehensive issue reporting.</p>
+
+        <form action="#" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" placeholder="Enter a brief description" required>
+
+            <label for="type">Complaint type</label>
+            <select id="type" name="type" required>
+                <option value="" disabled selected>Select a type</option>
+                <option value="waste_dumping">Waste Dumping</option>
+                <option value="public_nuisance">Public Nuisance</option>
+                <option value="traffic_violations">Traffic Violations</option>
+                <option value="water_leakage">Water Leakage</option>
+                <option value="street_light">Street Light Issue</option>
+                <option value="noise_pollution">Noise Pollution</option>
+                <option value="illegal_construction">Illegal Construction</option>
+                <option value="stray_animals">Stray Animals</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" placeholder="Enter the location" required>
+
+            <label for="proof">Proof</label>
+            <label for="proof" class="upload-label">Upload photo or video</label>
+            <input type="file" id="proof" name="proof" accept="image/*,video/*" required>
+
+            <div class="button-group">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="window.location.reload()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

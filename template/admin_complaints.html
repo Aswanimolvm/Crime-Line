@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Complaints</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: hsl(184, 100%, 34%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .complaint-card {
+      display: flex;
+      flex-direction: row;
+      background-color: #ffffff;
+      border-left: 6px solid hsl(184, 100%, 34%);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s ease;
+      gap: 20px;
+    }
+
+    .complaint-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .user-info {
+      background-color: #f1fbf6;
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 4px solid hsl(184, 100%, 34%);
+      min-width: 240px;
+      flex-shrink: 0;
+    }
+
+    .user-info p {
+      margin: 5px 0;
+      color: #444;
+    }
+
+    .user-info strong {
+      color: #000000;
+    }
+
+    .details {
+      flex-grow: 1;
+    }
+
+    .details h3 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: hsl(184, 100%, 34%);
+    }
+
+    .details p {
+      margin: 8px 0;
+      color: #333;
+    }
+
+    .admin-label {
+      font-weight: bold;
+      color: hsl(184, 100%, 34%);
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+
+    .verified-badge {
+      display: inline-block;
+      background-color: hsl(184, 100%, 34%);
+      color: white;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-left: 10px;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    .details img {
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .status-form {
+      margin-top: 15px;
+    }
+
+    .status-form label {
+      font-weight: 600;
+      margin-right: 10px;
+    }
+
+    .status-form select {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+    }
+
+    .status-form button {
+      background-color: hsl(184, 100%, 34%);
+      color: white;
+      padding: 6px 16px;
+      border: none;
+      border-radius: 6px;
+      margin-left: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .status-form button:hover {
+      background-color: hsl(184, 100%, 30%);
+    }
+
+    .no-complaints {
+      text-align: center;
+      color: #777;
+      margin-top: 40px;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .complaint-card {
+        flex-direction: column;
+      }
+
+      .user-info {
+        min-width: auto;
+        margin-bottom: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-shield-alt"></i> Admin - Complaint Management</h1>
+    </div>
+
+    {% if complaints %}
+      {% for complaint in complaints %}
+        <div class="complaint-card">
+          <div class="user-info">
+            <p><strong>Full Name:</strong> {{ complaint.user.full_name }}</p>
+            <p><strong>Email:</strong> {{ complaint.user.email }}</p>
+            <p><strong>Mobile Number:</strong> {{ complaint.user.mobile_number }}</p>
+          </div>
+
+          <!-- Inside the existing .details div -->
+<div class="details">
+  <h3>
+    {{ complaint.get_complaint_type_display }}
+    {% if complaint.verified %}
+      <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+    {% endif %}
+  </h3>
+
+  <p><span class="admin-label">Description:</span> {{ complaint.description }}</p>
+  <p><span class="admin-label">Location:</span> {{ complaint.location }}</p>
+  <p><span class="admin-label">Submitted on:</span> {{ complaint.submitted_at|date:"M d, Y H:i" }}</p>
+
+  {% if complaint.proof %}
+    <p class="admin-label">Proof:</p>
+    <img src="{{ complaint.proof.url }}" alt="Proof Image" style="max-width: 220px; height: auto;">
+  {% endif %}
+
+  <!-- Status Update Form -->
+  <form method="POST" action="{% url 'update_status' complaint.id %}" class="status-form">
+    {% csrf_token %}
+    <label for="status-{{ complaint.id }}">Update Status:</label>
+    <select name="status" id="status-{{ complaint.id }}">
+      <option value="pending" {% if complaint.status == 'pending' %}selected{% endif %}>Pending</option>
+      <option value="in_progress" {% if complaint.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+      <option value="resolved" {% if complaint.status == 'resolved' %}selected{% endif %}>Resolved</option>
+    </select>
+    <button type="submit" class="save">Save</button>
+    <form method="post" action="{% url 'delete_complaint' complaint.id %}" style="display:inline;">
+      {% csrf_token %}
+      <button class="btn btn-delete" style="background-color: red;" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+    </form>
+  </form>
+  
+</div>
+
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="no-complaints">No complaints have been submitted yet.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
